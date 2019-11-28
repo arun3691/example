@@ -1,0 +1,32 @@
+---
+ - hosts: web1
+   become: true
+   vars:
+     ad: "apache2"
+     ar: "httpd"
+     md: "mysql-server"
+     pd: "php"
+     pmd: "php-mysql"
+     ed1: "libapache2-mod-php"
+     ed2: "php-mcrypt"
+   tasks: 
+    - name: Installing debian  Machines
+      apt: pkg={{ item }} state=present update_cache=yes
+      with_items:
+       - "{{ ad }}"
+       - "{{ md }}"
+       - "{{ pd }}"
+       - "{{ pmd }}"
+       - "{{ ed1 }}" 
+       - "{{ ed2 }}"
+      when: ansible_os_family == "Debian"
+    - name: Installing Redhat Machines
+      yum: 
+         name:{{ item }}  
+         state:present
+      with_items:
+       - "{{ ar }}"
+       - "{{ md }}"
+       - "{{ pd }}"
+       - "{{ pmd }}"
+      when: ansible_os_family == "Redhat"
